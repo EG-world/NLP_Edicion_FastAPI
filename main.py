@@ -164,9 +164,9 @@ def compute_similarity_scores(lorem_text):
 base_prompt = PromptTemplate(
     input_variables=["lorem"],
     template="""
-    사용자가 입력한 텍스트가 자기소개 형태인지를 판단하는 AI야
-    자기를 소개하는 글이라고 판단되는 확률을 0~100%사이로 출력해줘
-    숫자%로만 출력해줘
+    사용자가 입력한 텍스트가 자기소개 형태인지를 판단하는 AI입니다.
+    자기를 소개하는 글이라고 판단되는 확률을 0~100%사이로 출력해주세요.
+    숫자%로만 출력해주셔야합니다.
     
     사용자가 입력한 자기소개 :
     {lorem}
@@ -213,8 +213,8 @@ prompt_1 = PromptTemplate(
 prompt_2_resume = PromptTemplate(
     input_variables=["lorem", "jobObjective"],
     template="""
-    사용자의 자기소개서를 {jobObjective}직무에 맞게 최적화해서 수정해주고, 400자 이상 작성해줘.
-    사용자가 어떤 말투로 입력을 해도 너는 자기소개서 말투에 맞게 ~입니다처럼 작성해주고 되도록이면 STAR 기법을 사용해서 작성해주면 좋겠어
+    사용자의 자기소개서를 {jobObjective}직무에 맞게 최적화해서 수정해주고, 400자 이상 작성해주세요.
+    사용자가 어떤 말투로 입력을 해도 너는 자기소개서 말투에 맞게 ~입니다처럼 작성해주고 되도록이면 STAR 기법을 사용해서 작성해주면 좋겠습니다.
     
     원본:
     {lorem}
@@ -226,8 +226,8 @@ prompt_2_resume = PromptTemplate(
 prompt_2_study = PromptTemplate(
     input_variables=["jobObjective", "retrieved_text"],
     template="""
-    사용자의 자기소개서가 {jobObjective}에 적합하지 않음.
-    따라서 {jobObjective}에 맞는 실력을 키우기 위한 공부법과 방향을 제공해줘.
+    사용자의 자기소개서가 {jobObjective}에 적합하지 않습니다.
+    따라서 {jobObjective}에 맞는 실력을 키우기 위한 공부법과 방향을 제공해주세요.
     참고할 내용:
     {retrieved_text}
 
@@ -238,8 +238,8 @@ prompt_2_study = PromptTemplate(
 prompt_3 = PromptTemplate(
     input_variables=["resume"],
     template="""
-    입력한 자기소개서가 어떤 인재 유형인지 판단해줘.
-    책임의식형, 도전정신형, 소통협력형, 창의성형 4가지 중에 하나로 판단해주면 돼.
+    입력한 자기소개서가 어떤 인재 유형인지 판단해주세요.
+    책임의식형, 도전정신형, 소통협력형, 창의성형 4가지 중에 하나로 판단하고,
     책임의식형, 도전정신형, 소통협력형, 창의성형 중 하나로 출력해주면 돼
     
     자기소개서:
@@ -252,9 +252,9 @@ prompt_3 = PromptTemplate(
 prompt_4 = PromptTemplate(
     input_variables=["lorem", "preferred", "job_id"],
     template="""
-    너가 고용주의 입장에서 {job_id}기업의 인재상에 해당하는 문장과 자기소개서의 직무적인 유사도를 판단해야해.
-    0~100% 사이의 점수로 평가하면 돼.
-    숫자%만 출력해줘
+    너가 고용주의 입장에서 {job_id}기업의 인재상에 해당하는 문장과 자기소개서의 직무적인 유사도를 판단해야합니다.
+    0~100% 사이의 점수로 평가하면 됩니다.
+    숫자%만 출력해주세요.
     
     자기소개서 :
     {lorem}
@@ -277,9 +277,7 @@ async def resume_pipeline(lorem, jobObjective):
     
     response_1_obj = await (prompt_1 | model).ainvoke({"lorem": lorem, "jobObjective": jobObjective})
     response_1_text = response_1_obj.content
-    
-    # jobObjective에 해당하는 점수는 벡터 점수를 우선 사용하도록 예시 처리합니다.
-        
+            
     scores = {}
     for line in response_1_text.splitlines():
         line = line.strip()
